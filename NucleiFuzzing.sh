@@ -2,19 +2,12 @@
 
 # ASCII art
 echo -e "\e[91m
-
-$$\   $$\                     $$\           $$\ $$$$$$$$\                            $$\                     
-$$$\  $$ |                    $$ |          \__|$$  _____|                           \__|                    
-$$$$\ $$ |$$\   $$\  $$$$$$$\ $$ | $$$$$$\  $$\ $$ |   $$\   $$\ $$$$$$$$\ $$$$$$$$\ $$\ $$$$$$$\   $$$$$$\  
-$$ $$\$$ |$$ |  $$ |$$  _____|$$ |$$  __$$\ $$ |$$$$$\ $$ |  $$ |\____$$  |\____$$  |$$ |$$  __$$\ $$  __$$\ 
-$$ \$$$$ |$$ |  $$ |$$ /      $$ |$$$$$$$$ |$$ |$$  __|$$ |  $$ |  $$$$ _/   $$$$ _/ $$ |$$ |  $$ |$$ /  $$ |
-$$ |\$$$ |$$ |  $$ |$$ |      $$ |$$   ____|$$ |$$ |   $$ |  $$ | $$  _/    $$  _/   $$ |$$ |  $$ |$$ |  $$ |
-$$ | \$$ |\$$$$$$  |\$$$$$$$\ $$ |\$$$$$$$\ $$ |$$ |   \$$$$$$  |$$$$$$$$\ $$$$$$$$\ $$ |$$ |  $$ |\$$$$$$$ |
-\__|  \__| \______/  \_______|\__| \_______|\__|\__|    \______/ \________|\________|\__|\__|  \__| \____$$ |
-                                                                                                   $$\   $$ |
-                                                                                                   \$$$$$$  |
-                                                                                                    \______/ 
-                                                                                                    
+    _   __           __     _ ______                _            
+   / | / /_  _______/ /__  (_) ____/_  __________  (_)___  ____ _
+  /  |/ / / / / ___/ / _ \/ / /_  / / / /_  /_  / / / __ \/ __ `/
+ / /|  / /_/ / /__/ /  __/ / __/ / /_/ / / /_/ /_/ / / / / /_/ / 
+/_/ |_/\__,_/\___/_/\___/_/_/    \__,_/ /___/___/_/_/ /_/\__, /  
+                                                        /____/ 
 \e[0m"
 
 # Help menu
@@ -33,7 +26,7 @@ read target_domain
 
 # Step 1: Run the dork command and collect the URLs found
 echo "Running dork command and collecting URLs..."
-urls=$(echo "site:*.$target_domain ext:php" | hakrawler -plain | grep "?" | uro | httpx -silent)
+urls=$(echo "site:*.$target_domain ext:php" | hakrawler -subs | grep "\?" | uro | httpx -silent)
 
 # Check if URLs found
 if [ -z "$urls" ]; then
@@ -52,7 +45,7 @@ subfinder -d "$target_domain" | httpx -silent -o subdomains.txt
 echo "Running waybackurls and collecting subparameters..."
 while read -r subdomain; do
     echo "Processing $subdomain"
-    echo "https://$subdomain" | waybackurls | grep "?" | uro | httpx -silent >> subparameters.txt
+    echo "https://$subdomain" | waybackurls | grep "\?" | uro | httpx -silent >> subparameters.txt
 done < subdomains.txt
 
 # Combine hakrawlerurls.txt and subparameters.txt into final_data.txt
